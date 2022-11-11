@@ -25,4 +25,4 @@ credentials:
 
 replicas:
   web: 1
-  save-handler: 1
+  saveHandler: 1

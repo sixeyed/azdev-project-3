@@ -5,7 +5,7 @@ metadata:
   labels:
     courselabs: project3
 spec:
-  replicas: {{ .Values.replicas.web }}
+  replicas: {{ .Values.replicas.saveHandler }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}
