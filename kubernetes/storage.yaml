@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-storage
+  labels:
+    courselabs: project3
+spec:
+  ports:
+    - name: blob 
+      port: 10000
+      targetPort: 10000
+    - name: queue
+      port: 10001
+      targetPort: 10001
+    - name: table
+      port: 10002
+      targetPort: 10002
+  selector:    
+    app: todo-list
+    component: storage
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-storage
+  labels:
+    courselabs: project3
+spec:
+  selector:
+    matchLabels:
+      app: todo-list
+      component: storage
+  template:
+    metadata:
+      labels:
+        app: todo-list
+        component: storage
+    spec:
+      containers:
+        - name: app
+          image: mcr.microsoft.com/azure-storage/azurite

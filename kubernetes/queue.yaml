@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-queue
+  labels:
+    courselabs: project3
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:    
+    app: todo-list
+    component: queue
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-queue
+  labels:
+    courselabs: project3
+spec:
+  selector:
+    matchLabels:
+      app: todo-list
+      component: queue
+  template:
+    metadata:
+      labels:
+        app: todo-list
+        component: queue
+    spec:
+      containers:
+        - name: app
+          image: redis:6.2-alpine

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-save-handler
+  labels:
+    courselabs: project3
+spec:
+  selector:
+    matchLabels:
+      app: todo-list
+      component: save-handler
+  template:
+    metadata:
+      labels:
+        app: todo-list
+        component: save-handler
+    spec:
+      containers:
+        - name: app
+          image: courselabs/todo-list-save-handler:2211
+          volumeMounts:
+            - name: config
+              mountPath: "/app/config"
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: todo-list-appsettings
