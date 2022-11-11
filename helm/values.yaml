@@ -1,0 +1,28 @@
+
+connectionStrings:
+  sqlServer: <placeholder>
+  redis: <placeholder>
+  tableStorage: <placeholder>
+
+include:
+  sqlServer: true
+  redis: true
+  azurite: true
+
+images:
+  saveHandler: courselabs/todo-list-save-handler:2211
+  web: courselabs/todo-list-web:2211
+  azurite: mcr.microsoft.com/azure-storage/azurite
+  redis: redis:6.2-alpine
+
+services:
+  web: 
+    port: 80
+
+credentials:
+  sqlServer:
+    password: PR**j3ct!!!
+
+replicas:
+  web: 1
+  save-handler: 1

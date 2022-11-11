@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-save-handler
+  labels:
+    courselabs: project3
+spec:
+  replicas: {{ .Values.replicas.web }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      component: save-handler
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        component: save-handler
+    spec:
+      containers:
+        - name: app
+          image: {{ .Values.images.saveHandler }}
+          volumeMounts:
+            - name: config
+              mountPath: "/app/config"
+              readOnly: true
+      volumes:
+        - name: config
+          secret:
+            secretName: {{ .Release.Name }}-appsettings

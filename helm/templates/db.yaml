@@ -1,0 +1,45 @@
+{{- if .Values.include.sqlServer }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-db
+  labels:
+    courselabs: project3
+spec:
+  ports:
+    - port: 1433
+      targetPort: 1433
+  selector:    
+    app: {{ .Release.Name }}
+    component: db
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-db
+  labels:
+    courselabs: project3
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      component: db
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        component: db
+    spec:
+      containers:
+        - name: app
+          image: mcr.microsoft.com/azure-sql-edge
+          env:
+          - name: ACCEPT_EULA
+            value: 'Y'
+          - name: MSSQL_PID
+            value: 'Developer'
+          envFrom:
+            - secretRef: 
+                name: {{ .Release.Name }}-passwords
+{{- end }}

@@ -1,0 +1,37 @@
+{{- if .Values.include.redis }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-queue
+  labels:
+    courselabs: project3
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:    
+    app: {{ .Release.Name }}
+    component: queue
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-queue
+  labels:
+    courselabs: project3
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      component: queue
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        component: queue
+    spec:
+      containers:
+        - name: app
+          image: {{ .Values.images.redis }}
+{{- end}}

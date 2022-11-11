@@ -1,0 +1,44 @@
+{{- if .Values.include.azurite }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-storage
+  labels:
+    courselabs: project3
+spec:
+  ports:
+    - name: blob 
+      port: 10000
+      targetPort: 10000
+    - name: queue
+      port: 10001
+      targetPort: 10001
+    - name: table
+      port: 10002
+      targetPort: 10002
+  selector:    
+    app: {{ .Release.Name }}
+    component: storage
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-storage
+  labels:
+    courselabs: project3
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      component: storage
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        component: storage
+    spec:
+      containers:
+        - name: app
+          image: {{ .Values.images.azurite }}
+{{- end }}
